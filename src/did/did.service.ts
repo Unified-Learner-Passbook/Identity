@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as ION from '@decentralized-identity/ion-tools';
 import { PrismaService } from 'src/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Identity, Prisma } from '@prisma/client';
 
 @Injectable()
 export class DidService {
@@ -82,5 +82,58 @@ export class DidService {
     } catch (err) {
       throw new NotFoundException(`${id} not found`);
     }
+  }
+
+  async updateDID(id: string, data: any) {
+    let artifact: Identity | null = null;
+    try {
+      artifact = await this.prisma.identity.findUnique({
+        where: {
+          id,
+        },
+      });
+      console.log(
+        'artifact: ',
+        JSON.parse(artifact.didDoc as string)?.didDocument
+          ?.verificationMethod[0].publicKeyJwk,
+      );
+
+      const content = data.content;
+      content['publicKeys'] = [
+        {
+          id: 'auth-key',
+          type: 'EcdsaSecp256k1VerificationKey2019',
+          publicKeyJwk: JSON.parse(artifact.didDoc as string)?.didDocument
+            ?.verificationMethod[0].publicKeyJwk,
+          purposes: ['authentication'],
+        },
+      ];
+
+      const did = new ION.DID({
+        content: content,
+      });
+
+      console.log('did: ', did);
+
+      const updateOperation = await did.generateOperation('update', {
+        addServices: content.services,
+      });
+
+      console.log('updateOperation: ', updateOperation);
+      const updateRequestBody = await did.generateRequest(1, updateOperation);
+      const updateRequest = new ION.AnchorRequest(updateRequestBody);
+      console.log('updateRequestBody: ', updateRequestBody);
+
+      const updateResponse = await updateRequest.submit();
+
+      console.log('updateResponse: ', updateResponse);
+
+      // if (updateResponse) {
+      return 'Successfully Updated';
+    } catch (err) {
+      throw new Error(err);
+    }
+    // }
+    // throw new Error('Not Registered');
   }
 }

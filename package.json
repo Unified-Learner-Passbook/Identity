@@ -21,11 +21,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@decentralized-identity/ion-sdk": "^0.6.0",
     "@decentralized-identity/ion-tools": "^0.1.1",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^6.1.4",
     "@prisma/client": "4.7.1",
     "prisma": "^4.7.1",
     "reflect-metadata": "^0.1.13",
