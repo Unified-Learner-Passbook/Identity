@@ -6,9 +6,10 @@ import { DidService } from './did/did.service';
 import { DidController } from './did/did.controller';
 import { DidModule } from './did/did.module';
 import { HttpModule } from '@nestjs/axios';
+import { KycModule } from './kyc/kyc.module';
 
 @Module({
-  imports: [DidModule, HttpModule],
+  imports: [DidModule, KycModule, HttpModule],
   controllers: [AppController, DidController],
   providers: [AppService, PrismaService, DidService],
 })
