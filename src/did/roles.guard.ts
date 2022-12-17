@@ -1,25 +1,50 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { AuthGuard, IAuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+export class JwtAuthGuard extends AuthGuard('jwt') implements IAuthGuard {
+  constructor(private reflector: Reflector) {
+    super();
+  }
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('Guard called');
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
+    await super.canActivate(context);
+    console.log('context: ', context.getHandler());
+    console.log(
+      'context.switchToHttp().getRequest(): ',
+      context.switchToHttp().getRequest()['user']['roles'],
+    );
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    if (!roles) {
-      return true;
+    console.log('roles: ', roles);
+    // if (!roles) {
+    //   console.log('sending false from here!');
+    //   return true;
+    // }
+
+    let isAllowed = false;
+    const request: Request = context.switchToHttp().getRequest();
+    try {
+      const tokenRoles: string[] = request['user']['roles'];
+      // for (const role of roles) {
+      //   if (tokenRoles.indexOf(role) > -1) {
+      //     isAllowed = true;
+      //     break;
+      //   }
+      // }
+      if (tokenRoles.indexOf('Student') > -1) {
+        isAllowed = true;
+      }
+    } catch (error) {
+      console.log({ err: error });
+      isAllowed = false;
     }
-    const request = context.switchToHttp().getRequest();
-    const user = request.user;
-    console.log('user: ', user);
-    console.log('user.roles: ', user.roles);
-    // return matchRoles(roles, user.roles);
-    if (user.roles.includes('Student')) return true;
-    return false;
+    return isAllowed;
+  }
+
+  handleRequest(err, user, info) {
+    console.log('in handle request!');
+    console.log({ handleRequest: info, err: err, user: user });
+    return user;
   }
 }
