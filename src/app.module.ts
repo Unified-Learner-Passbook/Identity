@@ -8,11 +8,13 @@ import { DidModule } from './did/did.module';
 import { HttpModule } from '@nestjs/axios';
 import { KycModule } from './kyc/kyc.module';
 import { ConfigModule } from '@nestjs/config';
+import { VcModule } from './vc/vc.module';
 
 @Module({
   imports: [
     DidModule,
     KycModule,
+    VcModule,
     HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
