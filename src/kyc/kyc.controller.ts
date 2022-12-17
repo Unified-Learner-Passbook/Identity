@@ -5,12 +5,22 @@ import KycService from './kyc.service';
 export class KycController {
   constructor(private readonly kycService: KycService) { }
   @Post('/register')
-  generateDID(@Body() body: any) {
+  registerUser(@Body() body: any) {
     return this.kycService.registerUser(body);
   }
 
-  @Post('/verify')
-  async resolveDID(@Body() body: any) {
-    return this.kycService.verifyUser(body);
+  @Post('/verifyRegistrationOtp')
+  verifyRegistrationOtp(@Body() body: any) {
+    return this.kycService.verifyRegistrationOtp(body);
+  }
+
+  @Post('/login')
+  async loginUser(@Body() body: any) {
+    return this.kycService.loginUser(body);
+  }
+
+  @Post('/verifyLoginOtp')
+  async verifyLoginOtp(@Body() body: any) {
+    return this.kycService.verifyLoginOtp(body);
   }
 }
