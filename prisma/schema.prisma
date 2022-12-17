@@ -11,6 +11,8 @@ datasource db {
 }
 
 model Identity {
-  did        String @id
-  privateKey String
+  id               String  @id
+  didDoc           Json
+  privateKey       Json
+  blockchainStatus Boolean @default(false)
 }
