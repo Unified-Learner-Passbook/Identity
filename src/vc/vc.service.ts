@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import * as ION from '@decentralized-identity/ion-tools';
 import { HttpService } from '@nestjs/axios';
@@ -29,6 +29,7 @@ export default class VcService {
         signature: signedJWSsecp256k1,
       };
     } else {
+      throw new NotFoundException("DID not found!")
     }
   }
 
