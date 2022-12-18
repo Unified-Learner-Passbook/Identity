@@ -1,13 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as ION from '@decentralized-identity/ion-tools';
 import { PrismaService } from 'src/prisma.service';
-import { Identity, Prisma } from '@prisma/client';
-import {
-  DidDocument,
-  IDidDocument,
-} from '@decentralized-identity/did-common-typescript';
+import { Identity } from '@prisma/client';
+import { IDidDocument } from '@decentralized-identity/did-common-typescript';
 
 export type DIDDocument = {
+  [key: string]: any;
   '@context': 'https://w3id.org/did-resolution/v1';
   didDocument: IDidDocument;
   didDocumentMetadata: any;
@@ -15,7 +13,7 @@ export type DIDDocument = {
 
 @Injectable()
 export class DidService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async generateDID(body: any) {
     // for checking later: did:ion:EiDD8WbnNy6mY32G5x4Q6PDijZTE3i16zoDtAqEQboU6CQ
@@ -48,7 +46,7 @@ export class DidService {
       await this.prisma.identity.create({
         data: {
           id: didUri,
-          didDoc: anchorResponse as Prisma.JsonValue,
+          didDoc: anchorResponse as DIDDocument,
           privateKey: authnKeys.privateJwk,
         },
       });
@@ -84,7 +82,7 @@ export class DidService {
           } catch (err) {
             console.log('not updated on blockchain');
           }
-          return artifact.didDoc;
+          return artifact.didDoc as DIDDocument;
         }
       } else {
         throw new Error('Not Found');
