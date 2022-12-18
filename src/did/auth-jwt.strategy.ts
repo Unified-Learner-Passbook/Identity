@@ -5,7 +5,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
-    console.log('process.env.JWKS_URI : ', process.env.JWKS_URI);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,13 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         jwksRequestsPerMinute: 5,
         jwksUri: process.env.JWKS_URI,
       }),
-      // secretOrKey: `-----BEGIN PUBLIC KEY-----\n${process.env.secret}\n-----END PUBLIC KEY-----`,
-      // secretOrKey: passportJwtSecret({
-      //   cache: true,
-      //   rateLimit: true,
-      //   jwksRequestsPerMinute: 5,
-      //   jwksUri: process.env.JWKS_URI,
-      // }),
       algorithms: ['RS256'],
     });
   }

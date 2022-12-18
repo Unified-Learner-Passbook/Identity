@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@decentralized-identity/did-common-typescript": "^0.1.19",
     "@decentralized-identity/ion-sdk": "^0.6.0",
     "@decentralized-identity/ion-tools": "^0.1.1",
     "@nestjs/axios": "^1.0.0",
@@ -32,12 +33,12 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.4",
     "@prisma/client": "4.7.1",
+    "crypto": "^1.0.1",
+    "encrypt-rsa": "^2.1.2",
     "jwks-rsa": "^3.0.0",
     "passport": "^0.6.0",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
-    "crypto": "^1.0.1",
-    "encrypt-rsa": "^2.1.2",
     "prisma": "^4.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

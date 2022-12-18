@@ -2,35 +2,47 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import * as ION from '@decentralized-identity/ion-tools';
 import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
-
+import { verifyJsonDTO } from './dtos/Verify.dto';
+import { DidService } from 'src/did/did.service';
 
 @Injectable()
 export default class VcService {
-  constructor(private readonly primsa: PrismaService, private readonly httpService: HttpService) { }
+  constructor(
+    private readonly primsa: PrismaService,
+    private readonly httpService: HttpService,
+    private readonly didService: DidService,
+  ) { }
 
-  async sign(body: any) {
-    const id = body.id;
-    const vcUnsigned = body.vc;
+  async sign(signerDID: string, toSign: string) {
 
-    const artifact = await this.primsa.identity.findUnique({
-      where: { id }
-    })
-    if (artifact) {
-      const signature = await ION.signJws({
-        "payload": vcUnsigned,
-        "privateJwk": artifact.privateKey,
-      })
-      const resolvedResponse = await lastValueFrom(this.httpService.get(`http://localhost:3001/did/resolve/${id}`))
-      const publicKey = resolvedResponse.data.didDocument.verificationMethod[0].publicKeyJwk
+    const did = await this.primsa.identity.findUnique({
+      where: { id: signerDID },
+    });
+    if (did) {
+      const signedJWSsecp256k1 = await ION.signJws({
+        payload: toSign,
+        privateJwk: did.privateKey,
+      });
+
+      const didDocument = await this.didService.resolveDID(signerDID);
       return {
-        "credential": vcUnsigned,
-        "publicKey": publicKey,
-        "signature": signature
-      }
+        publicKey: didDocument.didDocument.publicKey,
+        signature: signedJWSsecp256k1,
+      };
+    } else {
     }
-    else {
+  }
 
+  async verify(signerDID: string, signedDoc: string): Promise<boolean> {
+    const didDocument = await this.didService.resolveDID(signerDID);
+    try {
+      const verified = await ION.verifyJws({
+        jws: signedDoc,
+        publicJwk: didDocument.didDocument.publicKey[0].publicKeyJwk,
+      });
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

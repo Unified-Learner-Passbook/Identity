@@ -2,10 +2,20 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import * as ION from '@decentralized-identity/ion-tools';
 import { PrismaService } from 'src/prisma.service';
 import { Identity, Prisma } from '@prisma/client';
+import {
+  DidDocument,
+  IDidDocument,
+} from '@decentralized-identity/did-common-typescript';
+
+export type DIDDocument = {
+  '@context': 'https://w3id.org/did-resolution/v1';
+  didDocument: IDidDocument;
+  didDocumentMetadata: any;
+};
 
 @Injectable()
 export class DidService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async generateDID(body: any) {
     // for checking later: did:ion:EiDD8WbnNy6mY32G5x4Q6PDijZTE3i16zoDtAqEQboU6CQ
@@ -49,7 +59,7 @@ export class DidService {
     }
   }
 
-  async resolveDID(id: string) {
+  async resolveDID(id: string): Promise<DIDDocument> {
     // check on the blockchain and update status
     // URI: https://identity.foundation/ion/explorer/?did={DID}
     try {
