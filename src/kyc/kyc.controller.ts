@@ -6,11 +6,11 @@ export class KycController {
   constructor(private readonly kycService: KycService) { }
   @Post('/triggerKyc')
   triggerKyc(@Body() body: any) {
-    return this.kycService.triggerKyc(body);
+    return this.kycService.triggerKyc(body.aadhaar);
   }
 
   @Post('/register')
   register(@Body() body: any) {
-    return this.kycService.register(body);
+    return this.kycService.register(body.aadhaar, body.otp, body.username, body.password);
   }
 }

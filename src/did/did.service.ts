@@ -15,7 +15,7 @@ export type DIDDocument = {
 export class DidService {
   constructor(private prisma: PrismaService) {}
 
-  async generateDID(body: any) {
+  async generateDID(body: any): Promise<DIDDocument> {
     // for checking later: did:ion:EiDD8WbnNy6mY32G5x4Q6PDijZTE3i16zoDtAqEQboU6CQ
     // did:ion:EiCx-pbUGHbqs3a2gYj6n03fI1KQp2bnYWP8kosaLlBs4g
     // did:ion:EiCVe1bcyU9EA85QTsjvZv-51xdIA6DjR9ZCktu--DqnOA
