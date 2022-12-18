@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import * as ION from '@decentralized-identity/ion-tools';
 import { HttpService } from '@nestjs/axios';
-import { verifyJsonDTO } from './dtos/Verify.dto';
 import { DidService } from 'src/did/did.service';
 
 @Injectable()
@@ -11,7 +10,7 @@ export default class VcService {
     private readonly primsa: PrismaService,
     private readonly httpService: HttpService,
     private readonly didService: DidService,
-  ) { }
+  ) {}
 
   async sign(signerDID: string, toSign: string) {
 

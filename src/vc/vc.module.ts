@@ -1,6 +1,5 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { DidModule } from 'src/did/did.module';
 import { DidService } from 'src/did/did.service';
 import { PrismaService } from 'src/prisma.service';
 import { VcController } from './vc.controller';
