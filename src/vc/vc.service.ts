@@ -39,7 +39,7 @@ export default class VcService {
       const verified = await ION.verifyJws({
         jws: signedDoc,
         publicJwk: didDocument.didDocument.publicKey[0].publicKeyJwk,
-      });
+      }); // throws when it fails
       return true;
     } catch (e) {
       return false;
