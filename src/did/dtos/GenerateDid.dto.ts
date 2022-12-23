@@ -1,7 +1,8 @@
-import { IonDocumentModel } from '@decentralized-identity/ion-sdk';
 import { ApiProperty } from '@nestjs/swagger';
+import { DIDDocument, Service } from 'did-resolver';
 
 export class generateDidDTO {
   @ApiProperty()
-  content: IonDocumentModel;
+  alsoKnownAs?: string[];
+  service?: Service[];
 }

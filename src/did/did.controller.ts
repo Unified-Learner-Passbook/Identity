@@ -2,35 +2,44 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { DIDDocument } from 'did-resolver';
 import { DidService } from './did.service';
 import { generateDidDTO } from './dtos/GenerateDid.dto';
 import { JwtAuthGuard } from './roles.guard';
 
 @Controller('did')
 export class DidController {
-  constructor(private readonly didService: DidService) {}
+  constructor(private readonly didService: DidService) { }
 
   @ApiOperation({ summary: 'Generate a new DID' })
   @ApiResponse({ status: 200, description: 'Generated DID' })
   @Post('/generate')
-  generateDID(@Body() body: generateDidDTO) {
-    return this.didService.generateDID(body);
+  async generateDID(
+    @Body() generateRequest: generateDidDTO,
+  ): Promise<DIDDocument> {
+    return this.didService.generateDID(generateRequest);
   }
 
   @Get('/resolve/:id')
   async resolveDID(@Param('id') id: string) {
-    return this.didService.resolveDID(id);
+    const did: DIDDocument = await this.didService.resolveDID(id);
+    if (did) {
+      return did;
+    } else {
+      throw new NotFoundException('DID could not be resolved!');
+    }
   }
 
-  @Patch('/update/:id')
-  @UseGuards(JwtAuthGuard)
-  async updateDID(@Param('id') id: string, @Body() body: any) {
-    return this.didService.updateDID(id, body);
-  }
+  // @Patch('/update/:id')
+  // @UseGuards(JwtAuthGuard)
+  // async updateDID(@Param('id') id: string, @Body() body: any) {
+  //   return this.didService.updateDID(id, body);
+  // }
 }

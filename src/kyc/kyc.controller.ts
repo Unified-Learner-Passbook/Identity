@@ -11,6 +11,11 @@ export class KycController {
 
   @Post('/register')
   register(@Body() body: any) {
-    return this.kycService.register(body.aadhaar, body.otp, body.username, body.password);
+    return this.kycService.register(
+      body.aadhaar,
+      body.otp,
+      body.username,
+      body.password,
+    );
   }
 }

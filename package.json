@@ -34,6 +34,7 @@
     "@nestjs/swagger": "^6.1.4",
     "@prisma/client": "4.7.1",
     "crypto": "^1.0.1",
+    "did-resolver": "^4.0.1",
     "encrypt-rsa": "^2.1.2",
     "jwks-rsa": "^3.0.0",
     "passport": "^0.6.0",
@@ -42,7 +43,8 @@
     "prisma": "^4.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
