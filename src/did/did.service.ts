@@ -5,13 +5,13 @@ import { Identity, Prisma } from '@prisma/client';
 import { DIDDocument } from 'did-resolver';
 import { domainToASCII } from 'url';
 import { uuid } from 'uuidv4';
-import { generateDidDTO } from './dtos/GenerateDid.dto';
+import { GenerateDidDTO } from './dtos/GenerateDid.dto';
 
 @Injectable()
 export class DidService {
   constructor(private prisma: PrismaService) { }
 
-  async generateDID(doc: generateDidDTO): Promise<DIDDocument> {
+  async generateDID(doc: GenerateDidDTO): Promise<DIDDocument> {
     // Create private/public key pair
     const authnKeys = await ION.generateKeyPair('Ed25519');
     console.log(authnKeys);

@@ -11,7 +11,7 @@ import {
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { DIDDocument } from 'did-resolver';
 import { DidService } from './did.service';
-import { generateDidDTO } from './dtos/GenerateDid.dto';
+import { GenerateDidDTO } from './dtos/GenerateDid.dto';
 import { JwtAuthGuard } from './roles.guard';
 
 @Controller('did')
@@ -22,9 +22,14 @@ export class DidController {
   @ApiResponse({ status: 200, description: 'Generated DID' })
   @Post('/generate')
   async generateDID(
-    @Body() generateRequest: generateDidDTO,
-  ): Promise<DIDDocument> {
-    return this.didService.generateDID(generateRequest);
+    @Body() generateRequest: GenerateDidDTO[], 
+  ): Promise<DIDDocument[]> {
+    let generatedDIDs: Array<DIDDocument> = []
+    // TODO: Handle failed DIDs
+    for (const generateDidDTO of generateRequest) {
+      generatedDIDs.push(await this.didService.generateDID(generateDidDTO));
+    }
+    return generatedDIDs;
   }
 
   @Get('/resolve/:id')

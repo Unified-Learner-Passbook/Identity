@@ -8,7 +8,7 @@ import { AxiosResponse } from 'axios';
 import { DIDDocument } from 'did-resolver';
 import { lastValueFrom } from 'rxjs';
 import { DidService } from 'src/did/did.service';
-import { generateDidDTO } from 'src/did/dtos/GenerateDid.dto';
+import { GenerateDidDTO } from 'src/did/dtos/GenerateDid.dto';
 
 @Injectable()
 export default class KycService {
@@ -104,7 +104,7 @@ export default class KycService {
     aadhaar: string,
     username: string,
   ): Promise<DIDDocument> {
-    const didContent: generateDidDTO = {
+    const didContent: GenerateDidDTO = {
       alsoKnownAs: [`did:aadhaar:${aadhaar}`, username],
       service: [
         {
