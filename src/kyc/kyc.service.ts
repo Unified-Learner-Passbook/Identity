@@ -43,10 +43,10 @@ export default class KycService {
 
   async register(
     aadhaar: string,
-    otp: string,
+    otp: number,
     username: string,
     password: string,
-  ) {
+  ): Promise<DIDDocument> {
     // TODO: sanitize all inputs
     const userData = {
       email: aadhaar,
@@ -63,7 +63,7 @@ export default class KycService {
         const registrationData = {
           registration: {
             generateAuthenticationToken: true,
-            applicationId: 'a789504e-06e5-4213-b326-e6c75a7489e8',
+            applicationId: process.env.APPLICATION_ID,
             roles: ['Student'],
           },
           user: {
@@ -105,7 +105,7 @@ export default class KycService {
     username: string,
   ): Promise<DIDDocument> {
     const didContent: GenerateDidDTO = {
-      alsoKnownAs: [`did:aadhaar:${aadhaar}`, username],
+      alsoKnownAs: [`did:${aadhaar}:${aadhaar}`, aadhaar, username],
       service: [
         {
           id: 'AadhaarAuthentication',

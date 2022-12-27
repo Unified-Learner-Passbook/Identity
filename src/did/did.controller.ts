@@ -8,18 +8,21 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DIDDocument } from 'did-resolver';
 import { DidService } from './did.service';
 import { GenerateDidDTO } from './dtos/GenerateDid.dto';
 import { JwtAuthGuard } from './roles.guard';
 
+@ApiTags('DID')
 @Controller('did')
 export class DidController {
   constructor(private readonly didService: DidService) { }
 
   @ApiOperation({ summary: 'Generate a new DID' })
-  @ApiResponse({ status: 200, description: 'Generated DID' })
+  @ApiOkResponse({ description: 'DID Generated', isArray: true })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiBody({ type: GenerateDidDTO, isArray: true})
   @Post('/generate')
   async generateDID(
     @Body() generateRequest: GenerateDidDTO[], 
@@ -32,8 +35,13 @@ export class DidController {
     return generatedDIDs;
   }
 
+  @ApiOperation({ summary: 'Resolve a DID ID' })
+  @ApiOkResponse({ description: 'DID resolved' })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
+  @ApiNotFoundResponse({ description: 'DID not found' })
+  @ApiParam({name: 'id', description: 'The DID ID to resolve'})
   @Get('/resolve/:id')
-  async resolveDID(@Param('id') id: string) {
+  async resolveDID(@Param('id') id: string): Promise<DIDDocument> {
     const did: DIDDocument = await this.didService.resolveDID(id);
     if (did) {
       return did;
