@@ -9,7 +9,7 @@ import { GenerateDidDTO } from './dtos/GenerateDid.dto';
 
 @Injectable()
 export class DidService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async generateDID(doc: GenerateDidDTO): Promise<DIDDocument> {
     // Create private/public key pair
@@ -72,9 +72,11 @@ export class DidService {
   }
 
   async resolveDID(id: string): Promise<any> {
+    console.log('did in resolveDID: ', id);
     const artifact = await this.prisma.identity.findUnique({
       where: { id },
     });
+    console.log('artifact.didDoc: ', artifact.didDoc);
     if (artifact) {
       return JSON.parse(artifact.didDoc as string) as DIDDocument;
     } else {
