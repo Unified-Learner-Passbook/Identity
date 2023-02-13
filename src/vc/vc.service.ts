@@ -20,6 +20,7 @@ export default class VcService {
     });
 
     if (did) {
+      console.log('yes');
       const signedJWSEd25519 = await ION.signJws({
         payload: toSign,
         privateJwk: did.privateKey,
