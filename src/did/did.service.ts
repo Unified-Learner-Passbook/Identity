@@ -6,10 +6,11 @@ import { DIDDocument } from 'did-resolver';
 import { domainToASCII } from 'url';
 import { uuid } from 'uuidv4';
 import { GenerateDidDTO } from './dtos/GenerateDid.dto';
+import { VaultService } from './vault.service';
 
 @Injectable()
 export class DidService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private vault: VaultService) {}
 
   async generateDID(doc: GenerateDidDTO): Promise<DIDDocument> {
     // Create private/public key pair
@@ -42,10 +43,9 @@ export class DidService {
       data: {
         id: didUri,
         didDoc: JSON.stringify(document),
-        privateKey: authnKeys.privateJwk,
       },
     });
-
+    this.vault.writePvtKey(authnKeys.privateJwk, didUri)
     return document;
 
     // const did = new ION.DID({

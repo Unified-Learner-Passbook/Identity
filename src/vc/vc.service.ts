@@ -4,6 +4,7 @@ import * as ION from '@decentralized-identity/ion-tools';
 import { HttpService } from '@nestjs/axios';
 import { DidService } from 'src/did/did.service';
 import { DIDDocument } from 'did-resolver';
+import { VaultService } from 'src/did/vault.service';
 
 @Injectable()
 export default class VcService {
@@ -11,21 +12,26 @@ export default class VcService {
     private readonly primsa: PrismaService,
     private readonly httpService: HttpService,
     private readonly didService: DidService,
+    private readonly vault: VaultService,
   ) {}
 
   async sign(signerDID: string, toSign: string) {
     console.log('signerDID: ', signerDID);
+    console.time("Database");
     const did = await this.primsa.identity.findUnique({
       where: { id: signerDID },
     });
+    console.timeEnd("Database");
 
     if (did) {
       console.log('yes');
+      console.time("JWS Sign")
+      console.log(toSign)
       const signedJWSEd25519 = await ION.signJws({
         payload: toSign,
-        privateJwk: did.privateKey,
+        privateJwk: await this.vault.readPvtKey(signerDID),
       });
-
+      console.timeEnd("JWS Sign")
       return {
         publicKey: (JSON.parse(did.didDoc as string) as DIDDocument)
           .verificationMethod[0].publicKeyJwk,

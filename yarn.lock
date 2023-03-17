@@ -2071,6 +2071,15 @@ axios@1.1.3:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
+axios@^1.2.1:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.3.4.tgz#f5760cefd9cfb51fd2481acf88c05f67c4523024"
+  integrity sha512-toYm+Bsyl6VC5wSkfkbbNB6ROv7KY93PEBBL6xyDczaIHasAiv4wPqQ/c4RjoQzipxRD2W5g21cOqQulZ7rHwQ==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 babel-jest@^28.1.3:
   version "28.1.3"
   resolved "https://registry.npmjs.org/babel-jest/-/babel-jest-28.1.3.tgz"
@@ -4325,6 +4334,13 @@ hash.js@^1.0.0, hash.js@^1.0.3:
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
+
+hashi-vault-js@^0.4.12:
+  version "0.4.12"
+  resolved "https://registry.yarnpkg.com/hashi-vault-js/-/hashi-vault-js-0.4.12.tgz#c5994bd67a2f22a66ad8b05f694b72e4032266d0"
+  integrity sha512-ufWMVEW6SarjZkmSt6DtXquxagb1NW6uOg6BCZD5qYaTtz7yypvVg99ZEianJwEP8Gw8EMbmZl+y23ECHbd03A==
+  dependencies:
+    axios "^1.2.1"
 
 he@1.2.0, he@^1.2.0:
   version "1.2.0"

@@ -37,6 +37,7 @@
     "crypto": "^1.0.1",
     "did-resolver": "^4.0.1",
     "encrypt-rsa": "^2.1.2",
+    "hashi-vault-js": "^0.4.12",
     "jwks-rsa": "^3.0.0",
     "nodemailer": "^6.8.0",
     "passport": "^0.6.0",

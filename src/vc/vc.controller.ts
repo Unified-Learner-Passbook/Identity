@@ -15,6 +15,7 @@ export class VcController {
   @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
   @Post('/sign')
   sign(@Body() body: SignJsonDTO) {
+    console.log('tjis')
     return this.VcService.sign(body.DID, body.payload);
   }
 

@@ -14,6 +14,5 @@ datasource db {
 model Identity {
   id               String  @id
   didDoc           Json
-  privateKey       Json
   blockchainStatus Boolean @default(false)
 }

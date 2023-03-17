@@ -6,6 +6,7 @@ import { JwtStrategy } from './auth-jwt.strategy';
 import { DidController } from './did.controller';
 import { DidService } from './did.service';
 import { JwtAuthGuard } from './roles.guard';
+import { VaultService } from './vault.service';
 
 @Module({
   imports: [HttpModule],
@@ -13,6 +14,7 @@ import { JwtAuthGuard } from './roles.guard';
   providers: [
     DidService,
     PrismaService,
+    VaultService,
     // {
     //   provide: APP_GUARD,
     //   useClass: JwtAuthGuard,
