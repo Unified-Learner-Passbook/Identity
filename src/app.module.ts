@@ -9,6 +9,7 @@ import { HttpModule } from '@nestjs/axios';
 import { KycModule } from './kyc/kyc.module';
 import { ConfigModule } from '@nestjs/config';
 import { VcModule } from './vc/vc.module';
+import { VaultService } from './did/vault.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { VcModule } from './vc/vc.module';
     }),
   ],
   controllers: [AppController, DidController],
-  providers: [AppService, PrismaService, DidService],
+  providers: [AppService, PrismaService, DidService, VaultService],
 })
 export class AppModule {}
