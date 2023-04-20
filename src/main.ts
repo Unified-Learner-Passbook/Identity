@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors()
+  app.enableCors();
   // setup swagger
   const config = new DocumentBuilder()
     .setTitle('DID Layer 3 Service')

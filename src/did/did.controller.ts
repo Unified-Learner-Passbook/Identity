@@ -4,25 +4,20 @@ import {
   Get,
   NotFoundException,
   Param,
-  Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
-  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { DIDDocument } from 'did-resolver';
 import { DidService } from './did.service';
 import { GenerateDidDTO } from './dtos/GenerateDid.dto';
-import { JwtAuthGuard } from './roles.guard';
 
 @ApiTags('DID')
 @Controller('did')
@@ -54,16 +49,9 @@ export class DidController {
   async resolveDID(@Param('id') id: string): Promise<DIDDocument> {
     const did: DIDDocument = await this.didService.resolveDID(id);
     if (did) {
-      console.log('did in did controller: ', did);
       return did;
     } else {
       throw new NotFoundException('DID could not be resolved!');
     }
   }
-
-  // @Patch('/update/:id')
-  // @UseGuards(JwtAuthGuard)
-  // async updateDID(@Param('id') id: string, @Body() body: any) {
-  //   return this.didService.updateDID(id, body);
-  // }
 }
