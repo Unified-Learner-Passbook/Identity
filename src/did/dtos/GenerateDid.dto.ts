@@ -16,4 +16,8 @@ export class GenerateDidDTO {
     isArray: true,
   })
   service?: Service[];
+  @ApiProperty({
+    description: 'The method of DID.',
+  })
+  method: string;
 }

@@ -15,7 +15,7 @@ export class DidService {
     const authnKeys = await ION.generateKeyPair('Ed25519');
 
     // Create a UUID for the DID using uuidv4
-    const didUri = 'did:ulp:' + uuid();
+    const didUri = `did:${doc.method}:${uuid()}`;
 
     // Create a DID Document
     const document: DIDDocument = {

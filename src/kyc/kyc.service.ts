@@ -112,6 +112,7 @@ export default class KycService {
           serviceEndpoint: 'http://auth.konnect.samagra.io',
         },
       ],
+      method: 'aadhar',
     };
 
     try {
