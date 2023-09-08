@@ -2,9 +2,11 @@ import {
   Body,
   Controller,
   Get,
-  NotFoundException,
+  InternalServerErrorException,
+  Logger,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -13,11 +15,14 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { DIDDocument } from 'did-resolver';
 import { DidService } from './did.service';
 import { GenerateDidDTO } from './dtos/GenerateDid.dto';
+const pLimit = require('p-limit');
+const limit = pLimit(100);
 
 @ApiTags('DID')
 @Controller('did')
@@ -32,12 +37,15 @@ export class DidController {
   async generateDID(
     @Body() generateRequest: { content: GenerateDidDTO[] },
   ): Promise<DIDDocument[]> {
-    const generatedDIDs: Array<DIDDocument> = [];
-    // TODO: Handle failed DIDs
-    for (const generateDidDTO of generateRequest.content) {
-      generatedDIDs.push(await this.didService.generateDID(generateDidDTO));
+    const promises = generateRequest.content.map((generateDidDTO) => {
+      return limit(() => this.didService.generateDID(generateDidDTO));
+    });
+    try {
+      return await Promise.all(promises);
+    } catch (err) {
+      Logger.error(err);
+      throw new InternalServerErrorException(`Error generating one or more DIDs`);
     }
-    return generatedDIDs;
   }
 
   @ApiOperation({ summary: 'Resolve a DID ID' })
@@ -47,11 +55,6 @@ export class DidController {
   @ApiParam({ name: 'id', description: 'The DID ID to resolve' })
   @Get('/resolve/:id')
   async resolveDID(@Param('id') id: string): Promise<DIDDocument> {
-    const did: DIDDocument = await this.didService.resolveDID(id);
-    if (did) {
-      return did;
-    } else {
-      throw new NotFoundException('DID could not be resolved!');
-    }
+    return await this.didService.resolveDID(id);
   }
 }
