@@ -15,5 +15,9 @@ export class GenerateDidDTO {
       'An array of services that are used, for example a user registration service.',
     isArray: true,
   })
-  service?: Service[];
+  services?: Service[];
+  @ApiProperty({
+    description: 'The method of DID.',
+  })
+  method: string;
 }
